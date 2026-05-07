@@ -38,4 +38,4 @@ npm run preview
 
 ## Screenshots
 
-The first version uses stylized in-page phone mockups. When real app screenshots are ready, add them under `public/` or `src/assets/` and update the showcase component.
+The landing page uses app screenshots and the app icon from `public/assets/`.

@@ -31,7 +31,13 @@ const base = import.meta.env.BASE_URL.endsWith('/')
 >
   <header class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
     <a class="flex items-center gap-3 font-bold" href={base}>
-      <span class="flex h-9 w-9 items-center justify-center rounded-lg bg-ink text-white">N</span>
+      <img
+        alt=""
+        class="h-9 w-9 rounded-lg bg-white object-contain p-1 shadow-sm"
+        height="910"
+        src={`${base}assets/notif-icon.png`}
+        width="910"
+      />
       <span>Notif</span>
     </a>
     <nav class="hidden items-center gap-7 text-sm font-medium text-slate-600 sm:flex">
@@ -71,7 +77,7 @@ const base = import.meta.env.BASE_URL.endsWith('/')
         </div>
       </div>
       <div>
-        <AppShowcase />
+        <AppShowcase basePath={base} />
       </div>
     </section>
 
