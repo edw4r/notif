@@ -118,7 +118,4 @@ a {
     max-width: min(84vw, 320px);
   }
 
-  .testimonial-card--duplicate {
-    display: none;
-  }
 }

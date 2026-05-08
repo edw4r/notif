@@ -30,10 +30,6 @@ const testimonials = [
   ['Runner', 'When I am running, I can still hear updates from work emails or Slack without stopping to check my phone. It helps me stay connected while moving.'],
   ['Busy mom', 'When I am doing housework, I can turn on the speaker and focus on my chores while still hearing important notifications. That is great!']
 ];
-const testimonialCarouselItems = [
-  ...testimonials.map(([label, quote]) => ({ label, quote, duplicate: false })),
-  ...testimonials.map(([label, quote]) => ({ label, quote, duplicate: true }))
-];
 
 const moments = [
   ['Walking home', 'Keep your phone in your pocket and stay aware of your surroundings.'],
@@ -127,9 +123,9 @@ const structuredData = {
           >
           <div class="testimonial-track flex w-max gap-3 py-5" data-testimonial-track>
             {
-              testimonialCarouselItems.map(({ label, quote, duplicate }, index) => (
+              testimonials.map(([label, quote], index) => (
                 <figure
-                  class={`testimonial-card w-[250px] rounded-lg border border-slate-200 bg-white p-4 shadow-sm sm:w-[270px] lg:w-[300px]${duplicate ? ' testimonial-card--duplicate' : ''}`}
+                  class="testimonial-card w-[250px] rounded-lg border border-slate-200 bg-white p-4 shadow-sm sm:w-[270px] lg:w-[300px]"
                   style={`animation-delay: ${Math.min(index % testimonials.length, 3) * 90}ms`}
                 >
                   <blockquote class="text-sm leading-6 text-slate-700">"{quote}"</blockquote>
@@ -239,144 +235,10 @@ const structuredData = {
 <script>
   (() => {
     const viewport = document.querySelector('[data-testimonial-carousel]');
-    const track = viewport?.querySelector('[data-testimonial-track]');
-    if (!viewport || !track) return;
+    if (!viewport) return;
 
-    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     const mobileQuery = window.matchMedia('(max-width: 767px)');
-    const pauseState = {
-      hover: false,
-      focus: false,
-      pointer: false,
-      wheel: false
-    };
-
-    let rafId = 0;
-    let lastTs = 0;
-    let wheelIdleTimer = 0;
-    let pointerIdleTimer = 0;
-    let halfTrackWidth = 0;
-    const AUTO_SCROLL_PX_PER_SECOND = 56;
-
-    const clearWheelIdle = () => {
-      if (wheelIdleTimer) {
-        window.clearTimeout(wheelIdleTimer);
-        wheelIdleTimer = 0;
-      }
-    };
-
-    const clearPointerIdle = () => {
-      if (pointerIdleTimer) {
-        window.clearTimeout(pointerIdleTimer);
-        pointerIdleTimer = 0;
-      }
-    };
-
-    const updateHalfTrackWidth = () => {
-      halfTrackWidth = track.scrollWidth / 2;
-    };
-
-    const wrapScrollLeft = (value: number) => {
-      if (!halfTrackWidth) return value;
-      let wrapped = value % halfTrackWidth;
-      if (wrapped < 0) wrapped += halfTrackWidth;
-      return wrapped;
-    };
-
-    const setWrappedScrollLeft = (value: number) => {
-      viewport.scrollLeft = wrapScrollLeft(value);
-    };
-
-    const normalizeScrollBounds = () => {
-      if (!halfTrackWidth) return;
-      setWrappedScrollLeft(viewport.scrollLeft);
-    };
-
-    const isPaused = () => {
-      if (motionQuery.matches) return true;
-      return pauseState.hover || pauseState.focus || pauseState.pointer || pauseState.wheel;
-    };
-
     const isMobile = () => mobileQuery.matches;
-
-    const tick = (ts: number) => {
-      if (!lastTs) lastTs = ts;
-      const deltaSeconds = Math.min((ts - lastTs) / 1000, 0.05);
-      lastTs = ts;
-
-      if (!isMobile() && !isPaused()) {
-        setWrappedScrollLeft(viewport.scrollLeft + AUTO_SCROLL_PX_PER_SECOND * deltaSeconds);
-      }
-      rafId = window.requestAnimationFrame(tick);
-    };
-
-    const startLoop = () => {
-      if (!rafId) rafId = window.requestAnimationFrame(tick);
-    };
-
-    const stopLoop = () => {
-      if (rafId) {
-        window.cancelAnimationFrame(rafId);
-        rafId = 0;
-      }
-      lastTs = 0;
-    };
-
-    updateHalfTrackWidth();
-    if (!isMobile()) {
-      setWrappedScrollLeft(1);
-    } else {
-      viewport.scrollLeft = 0;
-    }
-    startLoop();
-
-    const resizeObserver = new ResizeObserver(() => {
-      updateHalfTrackWidth();
-      if (!isMobile()) {
-        normalizeScrollBounds();
-      }
-    });
-    resizeObserver.observe(track);
-
-    const setWheelIdle = () => {
-      clearWheelIdle();
-      wheelIdleTimer = window.setTimeout(() => {
-        pauseState.wheel = false;
-      }, 220);
-    };
-
-    const setPointerIdle = () => {
-      clearPointerIdle();
-      pointerIdleTimer = window.setTimeout(() => {
-        pauseState.pointer = false;
-      }, 220);
-    };
-
-    viewport.addEventListener('mouseenter', () => {
-      pauseState.hover = true;
-    });
-    viewport.addEventListener('mouseleave', () => {
-      pauseState.hover = false;
-    });
-    viewport.addEventListener('focusin', () => {
-      pauseState.focus = true;
-    });
-    viewport.addEventListener('focusout', () => {
-      pauseState.focus = false;
-    });
-
-    viewport.addEventListener('pointerdown', () => {
-      pauseState.pointer = true;
-      clearPointerIdle();
-    });
-    viewport.addEventListener('pointerup', setPointerIdle);
-    viewport.addEventListener('pointercancel', setPointerIdle);
-    viewport.addEventListener('touchstart', () => {
-      pauseState.pointer = true;
-      clearPointerIdle();
-    }, { passive: true });
-    viewport.addEventListener('touchend', setPointerIdle, { passive: true });
-    viewport.addEventListener('touchcancel', setPointerIdle, { passive: true });
 
     viewport.addEventListener('wheel', (event: Event) => {
       if (isMobile()) return;
@@ -384,32 +246,13 @@ const structuredData = {
       const mostlyHorizontal = Math.abs(wheelEvent.deltaX) >= Math.abs(wheelEvent.deltaY) * 0.85;
       if (!mostlyHorizontal) return;
       wheelEvent.preventDefault();
-      pauseState.wheel = true;
-      setWrappedScrollLeft(viewport.scrollLeft + wheelEvent.deltaX);
-      setWheelIdle();
+      viewport.scrollLeft += wheelEvent.deltaX;
     }, { passive: false });
-
-    motionQuery.addEventListener('change', () => {
-      if (motionQuery.matches) {
-        pauseState.wheel = false;
-        pauseState.pointer = false;
-      }
-    });
 
     mobileQuery.addEventListener('change', () => {
       if (isMobile()) {
         viewport.scrollLeft = 0;
-      } else {
-        setWrappedScrollLeft(viewport.scrollLeft || 1);
       }
-      lastTs = 0;
-    });
-
-    window.addEventListener('beforeunload', () => {
-      clearWheelIdle();
-      clearPointerIdle();
-      stopLoop();
-      resizeObserver.disconnect();
     });
   })();
 </script>
