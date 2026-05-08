@@ -34,7 +34,7 @@ a {
 
 .testimonial-viewport {
   overflow-x: auto;
-  overflow-y: hidden;
+  overflow-y: visible;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
   touch-action: pan-x;
@@ -60,46 +60,11 @@ a {
   transition: transform 220ms ease, box-shadow 220ms ease;
 }
 
-.testimonial-card::after {
-  content: "";
-  position: absolute;
-  inset: -6px;
-  border-radius: 0.9rem;
-  border: 1px solid rgba(100, 116, 139, 0.28);
-  background:
-    linear-gradient(
-      115deg,
-      rgba(255, 255, 255, 0) 0%,
-      rgba(186, 230, 253, 0.16) 42%,
-      rgba(224, 242, 254, 0.34) 50%,
-      rgba(186, 230, 253, 0.16) 58%,
-      rgba(255, 255, 255, 0) 100%
-    );
-  background-size: 220% 100%;
-  background-position: 170% 0;
-  -webkit-mask:
-    linear-gradient(#fff 0 0) padding-box,
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask:
-    linear-gradient(#fff 0 0) padding-box,
-    linear-gradient(#fff 0 0);
-  mask-composite: exclude;
-  padding: 1px;
-  opacity: 0;
-  pointer-events: none;
-}
-
 .testimonial-card:hover {
-  transform: translateY(-4px) scale(1.01);
+  transform: translateY(-5px) scale(1.01);
   box-shadow:
-    0 18px 32px -22px rgba(15, 23, 42, 0.45),
-    0 8px 20px -16px rgba(14, 165, 233, 0.38);
-}
-
-.testimonial-card:hover::after {
-  opacity: 0.85;
-  animation: border-shine 1.6s linear infinite;
+    0 20px 42px -20px rgba(2, 6, 23, 0.65),
+    0 8px 18px -14px rgba(2, 6, 23, 0.5);
 }
 
 @keyframes testimonial-rise {
@@ -114,16 +79,6 @@ a {
   }
 }
 
-@keyframes border-shine {
-  0% {
-    background-position: 170% 0;
-  }
-
-  100% {
-    background-position: -70% 0;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -134,17 +89,11 @@ a {
     animation: none;
   }
 
-  .testimonial-card,
-  .testimonial-card::after {
+  .testimonial-card {
     transition: none;
-    animation: none;
   }
 
   .testimonial-card:hover {
     transform: none;
-  }
-
-  .testimonial-card:hover::after {
-    opacity: 0.5;
   }
 }
