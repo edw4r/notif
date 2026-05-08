@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://edw4r.github.io/notif/sitemap.xml

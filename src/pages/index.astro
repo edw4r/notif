@@ -1,0 +1,223 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { AppShowcase } from '../components/AppShowcase';
+import { PlayStoreButton } from '../components/PlayStoreButton';
+
+const features = [
+  ['🔊 Spoken readout', 'Notif reads selected Android notifications aloud when your hands are busy.'],
+  ['🎚️ Per-app control', 'Set each app to read or mute so only useful notifications interrupt you.'],
+  ['🎧 Bluetooth ready', 'Works with headphones, earbuds, and Bluetooth devices during everyday routines.'],
+  ['📣 Adjustable volume', 'Tune readout volume separately so spoken updates fit your environment.'],
+  ['✂️ Custom limits', 'Control behavior and word limits to keep readouts short and practical.'],
+  ['⚡ Lightweight setup', 'No account, no sign-in, and a simple setup path on Android.']
+];
+
+const privacyPoints = [
+  'Notification logic runs on your device',
+  'No cloud processing for notification readouts',
+  'No account or sign-in required',
+  'Notif does not scan installed apps'
+];
+
+const testimonials = [
+  ['Ex-iOS user', 'I used to have an iPhone and really missed being able to listen to my notifications. I have been waiting for something like this on Android for a long time.'],
+  ['Gadget lover', 'I can pair it with my AirPods Pro, and it works amazingly well. Super convenient!'],
+  ['Beta tester / Ex-iOS user', 'Great app for anyone switching from iPhone to Android. It brings back a feature I really missed. Love it!'],
+  ['Safety-conscious walker', 'I walk home every day, and I do not like holding my phone on the street. With this app, I can pay attention to my surroundings and still hear my notifications. It feels much safer.'],
+  ['Daily walker', 'This app is perfect for walking outside. I can keep my phone in my pocket and still know what messages are coming in.'],
+  ['Software engineer', 'I am a software engineer, and this app helps me stay focused while coding. I do not need to keep checking my phone just to know if a message is important.'],
+  ['Beta tester', 'I get so many messages, emails, WhatsApp, and Instagram DMs every day. Now I can give my eyes a rest and listen without missing anything. Perfect!'],
+  ['Runner', 'When I am running, I can still hear updates from work emails or Slack without stopping to check my phone. It helps me stay connected while moving.'],
+  ['Busy mom', 'When I am doing housework, I can turn on the speaker and focus on my chores while still hearing important notifications. That is great!']
+];
+
+const moments = [
+  ['Walking home', 'Keep your phone in your pocket and stay aware of your surroundings.'],
+  ['Running', 'Catch work email or Slack updates without breaking pace.'],
+  ['Coding', 'Stay in flow while still knowing whether a message needs attention.'],
+  ['Housework', 'Use speaker readout while cooking, cleaning, or moving around the room.'],
+  ['Message-heavy days', 'Give your eyes a break from emails, DMs, chats, and app alerts.']
+];
+
+const base = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+const siteUrl = 'https://edw4r.github.io';
+const absoluteBase = `${siteUrl}${base}`;
+const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.app.android.notif';
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'SoftwareApplication',
+  name: 'Notif',
+  applicationCategory: 'UtilitiesApplication',
+  operatingSystem: 'Android',
+  description: 'Notif is an Android notification reader that speaks selected notifications aloud with private, on-device readout logic and no account required.',
+  url: absoluteBase,
+  image: `${absoluteBase}assets/notif-settings.png`,
+  offers: {
+    '@type': 'Offer',
+    price: '0',
+    priceCurrency: 'USD'
+  },
+  downloadUrl: playStoreUrl,
+  privacyPolicy: `${absoluteBase}privacy-policy/`
+};
+---
+
+<BaseLayout
+  title="Notif - Android Notification Reader for Private Spoken Alerts"
+  description="Notif reads Android notifications aloud with hands-free spoken readouts, per-app controls, Bluetooth support, and private on-device notification logic."
+  imageAlt="Notif Android settings screen showing spoken notification readout controls."
+  structuredData={structuredData}
+>
+  <header class="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 lg:px-8">
+    <a class="flex items-center gap-3 font-bold" href={base}>
+      <img
+        alt=""
+        class="h-9 w-9 rounded-lg bg-white object-contain p-1 shadow-sm"
+        height="910"
+        src={`${base}assets/notif-icon.png`}
+        width="910"
+      />
+      <span>Notif</span>
+    </a>
+    <nav class="hidden items-center gap-7 text-sm font-medium text-slate-600 sm:flex">
+      <a class="hover:text-ink" href="#features">Features</a>
+      <a class="hover:text-ink" href="#moments">Use cases</a>
+      <a class="hover:text-ink" href="#privacy">Privacy</a>
+      <a class="hover:text-ink" href={`${base}privacy-policy/`}>Policy</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="mx-auto grid max-w-7xl items-center gap-12 px-6 pb-16 pt-10 lg:grid-cols-[0.9fr_1.1fr] lg:px-8 lg:pb-24 lg:pt-16">
+      <div>
+        <p class="text-sm font-bold uppercase tracking-[0.22em] text-leaf">Private spoken notifications</p>
+        <h1 class="mt-5 max-w-3xl text-5xl font-black leading-[1.02] text-ink sm:text-6xl lg:text-7xl">
+          Hear Android notifications hands-free.
+        </h1>
+        <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
+          Notif turns selected Android notifications into spoken readouts while keeping the logic on your device. It was built for Android users who miss spoken notifications and want a practical way to hear important updates while walking, coding, running, or handling chores without constantly looking down.
+        </p>
+        <div class="mt-8 flex flex-col gap-3 sm:flex-row">
+          <PlayStoreButton />
+          <a
+            class="inline-flex items-center justify-center rounded-md border border-slate-300 bg-white px-5 py-3 text-sm font-semibold text-ink shadow-sm transition hover:-translate-y-0.5 hover:border-slate-400 focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2"
+            href="#privacy"
+          >
+            See privacy approach
+          </a>
+        </div>
+      </div>
+      <div>
+        <AppShowcase basePath={base} />
+      </div>
+      <div class="overflow-hidden rounded-lg border border-white/70 bg-white/75 p-3 shadow-sm backdrop-blur lg:col-span-2" aria-label="Friend comments about Notif">
+        <div class="testimonial-track flex w-max gap-3">
+          {
+            [...testimonials, ...testimonials].map(([label, quote], index) => (
+              <figure
+                class="testimonial-card w-[250px] rounded-lg border border-slate-200 bg-white p-4 shadow-sm sm:w-[270px] lg:w-[300px]"
+                style={`animation-delay: ${Math.min(index % testimonials.length, 3) * 90}ms`}
+              >
+                <blockquote class="text-sm leading-6 text-slate-700">"{quote}"</blockquote>
+                <figcaption class="mt-4 text-xs font-bold uppercase tracking-[0.16em] text-signal">{label}</figcaption>
+              </figure>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="bg-white/80 py-20">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="max-w-3xl">
+          <p class="text-sm font-bold uppercase tracking-[0.22em] text-signal">Built for daily motion</p>
+          <h2 class="mt-4 text-4xl font-black text-ink">The useful parts of your Android notifications, out loud.</h2>
+        </div>
+        <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {
+            features.map(([title, body]) => (
+              <article class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+                <h3 class="text-lg font-bold text-ink">{title}</h3>
+                <p class="mt-3 leading-7 text-slate-600">{body}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section id="moments" class="py-20">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-end">
+          <div>
+            <p class="text-sm font-bold uppercase tracking-[0.22em] text-orange-500">Everyday moments</p>
+            <h2 class="mt-4 text-4xl font-black text-ink">Stay updated without checking your screen.</h2>
+          </div>
+          <p class="max-w-2xl text-lg leading-8 text-slate-600">
+            Notif is made for the ordinary moments when your phone is nearby but your hands, eyes, or attention are already busy.
+          </p>
+        </div>
+        <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {
+            moments.map(([title, body]) => (
+              <article class="rounded-lg border border-slate-200 bg-white p-6 shadow-sm">
+                <h3 class="text-lg font-bold text-ink">{title}</h3>
+                <p class="mt-3 leading-7 text-slate-600">{body}</p>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section id="privacy" class="py-20">
+      <div class="mx-auto grid max-w-7xl gap-10 px-6 lg:grid-cols-[0.85fr_1.15fr] lg:px-8">
+        <div>
+          <p class="text-sm font-bold uppercase tracking-[0.22em] text-leaf">Privacy first</p>
+          <h2 class="mt-4 text-4xl font-black text-ink">Designed to speak notifications without turning them into cloud data.</h2>
+        </div>
+        <div class="grid gap-4 sm:grid-cols-2">
+          {
+            privacyPoints.map((point) => (
+              <div class="rounded-lg border border-emerald-200 bg-white p-6 shadow-sm">
+                <div class="mb-5 flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100 text-lg font-black text-leaf">✓</div>
+                <p class="text-lg font-bold text-ink">{point}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-ink py-20 text-white">
+      <div class="mx-auto max-w-7xl px-6 lg:px-8">
+        <div class="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+          <div>
+            <p class="text-sm font-bold uppercase tracking-[0.22em] text-orange-300">Try Notif</p>
+            <h2 class="mt-4 text-4xl font-black">Let Android notifications speak when looking down is not ideal.</h2>
+          </div>
+          <div class="flex flex-col gap-3 sm:flex-row lg:justify-end">
+            <PlayStoreButton variant="light" />
+            <a
+              class="inline-flex items-center justify-center rounded-md border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2 focus:ring-offset-ink"
+              href={`${base}privacy-policy/`}
+            >
+              Read privacy policy
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-8 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+    <p>© 2026 Notif. Private spoken notifications for Android.</p>
+    <div class="flex flex-wrap gap-5">
+      <a class="hover:text-ink" href={`${base}privacy-policy/`}>Privacy Policy</a>
+      <a class="hover:text-ink" href="mailto:edward.devapps@gmail.com">Support</a>
+      <a class="hover:text-ink" href="https://play.google.com/store/apps/details?id=com.app.android.notif" rel="noreferrer" target="_blank">Google Play</a>
+    </div>
+  </footer>
+</BaseLayout>
