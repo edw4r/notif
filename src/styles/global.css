@@ -63,11 +63,14 @@ a {
 .testimonial-card::after {
   content: "";
   position: absolute;
-  inset: -6px;
+  inset: -8px;
   border-radius: 0.9rem;
-  border: 1px solid rgba(56, 189, 248, 0.38);
+  border: 2px solid rgba(14, 165, 233, 0.72);
+  box-shadow:
+    0 0 0 0 rgba(14, 165, 233, 0.45),
+    0 0 28px 3px rgba(125, 211, 252, 0.35);
   opacity: 0;
-  transform: scale(0.98);
+  transform: scale(0.96);
   pointer-events: none;
 }
 
@@ -79,8 +82,8 @@ a {
 }
 
 .testimonial-card:hover::after {
-  opacity: 1;
-  animation: heartbeat-wave 1.25s ease-out infinite;
+  opacity: 0.95;
+  animation: heartbeat-wave 0.95s cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
 }
 
 @keyframes testimonial-rise {
@@ -97,17 +100,17 @@ a {
 
 @keyframes heartbeat-wave {
   0% {
-    transform: scale(0.98);
-    opacity: 0.6;
+    transform: scale(0.96);
+    opacity: 0.95;
   }
 
-  70% {
-    transform: scale(1.06);
-    opacity: 0.15;
+  40% {
+    transform: scale(1.035);
+    opacity: 0.8;
   }
 
   100% {
-    transform: scale(1.1);
+    transform: scale(1.14);
     opacity: 0;
   }
 }
@@ -133,6 +136,6 @@ a {
   }
 
   .testimonial-card:hover::after {
-    opacity: 0.55;
+    opacity: 0.65;
   }
 }
