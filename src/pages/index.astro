@@ -112,8 +112,8 @@ const structuredData = {
       <div>
         <AppShowcase basePath={base} />
       </div>
-      <div class="rounded-lg border border-white/70 bg-white/75 p-3 shadow-sm backdrop-blur lg:col-span-2">
-        <div class="overflow-x-hidden rounded-md">
+      <div class="rounded-lg border border-white/55 p-3 shadow-sm backdrop-blur lg:col-span-2">
+        <div class="testimonial-lane overflow-hidden rounded-md">
           <div
             class="testimonial-viewport"
             data-testimonial-carousel
@@ -239,6 +239,7 @@ const structuredData = {
     if (!viewport || !track) return;
 
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const mobileQuery = window.matchMedia('(max-width: 767px)');
     const pauseState = {
       hover: false,
       focus: false,
@@ -292,12 +293,14 @@ const structuredData = {
       return pauseState.hover || pauseState.focus || pauseState.pointer || pauseState.wheel;
     };
 
+    const isMobile = () => mobileQuery.matches;
+
     const tick = (ts: number) => {
       if (!lastTs) lastTs = ts;
       const deltaSeconds = Math.min((ts - lastTs) / 1000, 0.05);
       lastTs = ts;
 
-      if (!isPaused()) {
+      if (!isMobile() && !isPaused()) {
         setWrappedScrollLeft(viewport.scrollLeft + AUTO_SCROLL_PX_PER_SECOND * deltaSeconds);
       }
       rafId = window.requestAnimationFrame(tick);
@@ -316,12 +319,18 @@ const structuredData = {
     };
 
     updateHalfTrackWidth();
-    setWrappedScrollLeft(1);
+    if (!isMobile()) {
+      setWrappedScrollLeft(1);
+    } else {
+      viewport.scrollLeft = 0;
+    }
     startLoop();
 
     const resizeObserver = new ResizeObserver(() => {
       updateHalfTrackWidth();
-      normalizeScrollBounds();
+      if (!isMobile()) {
+        normalizeScrollBounds();
+      }
     });
     resizeObserver.observe(track);
 
@@ -366,6 +375,7 @@ const structuredData = {
     viewport.addEventListener('touchcancel', setPointerIdle, { passive: true });
 
     viewport.addEventListener('wheel', (event: Event) => {
+      if (isMobile()) return;
       const wheelEvent = event as WheelEvent;
       const mostlyHorizontal = Math.abs(wheelEvent.deltaX) >= Math.abs(wheelEvent.deltaY) * 0.85;
       if (!mostlyHorizontal) return;
@@ -380,6 +390,15 @@ const structuredData = {
         pauseState.wheel = false;
         pauseState.pointer = false;
       }
+    });
+
+    mobileQuery.addEventListener('change', () => {
+      if (isMobile()) {
+        viewport.scrollLeft = 0;
+      } else {
+        setWrappedScrollLeft(viewport.scrollLeft || 1);
+      }
+      lastTs = 0;
     });
 
     window.addEventListener('beforeunload', () => {

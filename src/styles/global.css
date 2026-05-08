@@ -58,6 +58,7 @@ a {
   isolation: isolate;
   animation: testimonial-rise 560ms ease both;
   transition: transform 220ms ease, box-shadow 220ms ease;
+  scroll-snap-align: start;
 }
 
 .testimonial-card:hover {
@@ -95,5 +96,28 @@ a {
 
   .testimonial-card:hover {
     transform: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .testimonial-lane {
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+
+  .testimonial-viewport {
+    cursor: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 0.125rem;
+  }
+
+  .testimonial-track {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .testimonial-card {
+    width: min(84vw, 320px);
+    max-width: min(84vw, 320px);
   }
 }
