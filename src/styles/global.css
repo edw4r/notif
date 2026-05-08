@@ -57,15 +57,12 @@ a {
   position: relative;
   isolation: isolate;
   animation: testimonial-rise 560ms ease both;
-  transition: transform 220ms ease, box-shadow 220ms ease;
+  transition: border-color 180ms ease;
   scroll-snap-align: start;
 }
 
 .testimonial-card:hover {
-  transform: translateY(-5px) scale(1.01);
-  box-shadow:
-    0 20px 42px -20px rgba(2, 6, 23, 0.65),
-    0 8px 18px -14px rgba(2, 6, 23, 0.5);
+  border-color: rgb(148 163 184 / 0.8);
 }
 
 @keyframes testimonial-rise {
@@ -95,7 +92,7 @@ a {
   }
 
   .testimonial-card:hover {
-    transform: none;
+    border-color: inherit;
   }
 }
 
