@@ -1,13 +1,19 @@
 type PlayStoreButtonProps = {
   className?: string;
+  variant?: 'dark' | 'light';
 };
 
 const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.app.android.notif';
 
-export function PlayStoreButton({ className = '' }: PlayStoreButtonProps) {
+export function PlayStoreButton({ className = '', variant = 'dark' }: PlayStoreButtonProps) {
+  const variantClassName =
+    variant === 'light'
+      ? 'bg-white text-ink hover:bg-slate-100 focus:ring-orange-300 focus:ring-offset-ink'
+      : 'bg-ink text-white hover:bg-slate-800 focus:ring-signal focus:ring-offset-2';
+
   return (
     <a
-      className={`inline-flex items-center justify-center gap-3 rounded-md bg-ink px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-slate-900/15 transition hover:-translate-y-0.5 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-signal focus:ring-offset-2 ${className}`}
+      className={`inline-flex items-center justify-center gap-3 rounded-md px-5 py-3 text-sm font-semibold shadow-lg shadow-slate-900/15 transition hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 ${variantClassName} ${className}`}
       href={playStoreUrl}
       rel="noreferrer"
       target="_blank"

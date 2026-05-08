@@ -20,11 +20,10 @@ const privacyPoints = [
 ];
 
 const testimonials = [
-  ['Friend using it while driving', 'This app is really useful when I am driving. I can stay focused on the road while still knowing when an important message from my family comes in.'],
   ['Ex-iOS user', 'I used to have an iPhone and really missed being able to listen to my notifications. I have been waiting for something like this on Android for a long time.'],
   ['Gadget lover', 'I can pair it with my AirPods Pro, and it works amazingly well. Super convenient!'],
   ['Beta tester / Ex-iOS user', 'Great app for anyone switching from iPhone to Android. It brings back a feature I really missed. Love it!'],
-  ['Safety-conscious walker', 'I walk home every day, and I do not like holding my phone on the street. With this app, I can pay attention to the road and still hear my notifications. It feels much safer.'],
+  ['Safety-conscious walker', 'I walk home every day, and I do not like holding my phone on the street. With this app, I can pay attention to my surroundings and still hear my notifications. It feels much safer.'],
   ['Daily walker', 'This app is perfect for walking outside. I can keep my phone in my pocket and still know what messages are coming in.'],
   ['Software engineer', 'I am a software engineer, and this app helps me stay focused while coding. I do not need to keep checking my phone just to know if a message is important.'],
   ['Beta tester', 'I get so many messages, emails, WhatsApp, and Instagram DMs every day. Now I can give my eyes a rest and listen without missing anything. Perfect!'],
@@ -33,7 +32,6 @@ const testimonials = [
 ];
 
 const moments = [
-  ['Driving', 'Hear important family messages while your eyes stay on the road.'],
   ['Walking home', 'Keep your phone in your pocket and stay aware of your surroundings.'],
   ['Running', 'Catch work email or Slack updates without breaking pace.'],
   ['Coding', 'Stay in flow while still knowing whether a message needs attention.'],
@@ -45,7 +43,7 @@ const comparisons = [
   ['Checking your screen', 'Notif helps you hear selected updates without picking up your phone every few minutes.'],
   ['Generic voice assistants', 'Notif focuses on Android notification readouts instead of trying to be a full assistant.'],
   ['Manual notification readers', 'Per-app controls and custom limits keep spoken alerts practical for daily use.'],
-  ['Cloud-first workflows', 'Notif is designed around on-device notification logic and a no-account setup.']
+  ['Offline-first workflow', 'Notif keeps notification readout logic on your device, with no account required.']
 ];
 
 const base = import.meta.env.BASE_URL.endsWith('/')
@@ -106,7 +104,7 @@ const structuredData = {
           Hear Android notifications hands-free.
         </h1>
         <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-          Notif turns selected Android notifications into spoken readouts while keeping the logic on your device. Use it while driving, walking, coding, running, or handling chores without unlocking your phone.
+          Notif turns selected Android notifications into spoken readouts while keeping the logic on your device. Use it while walking, coding, running, or handling chores without unlocking your phone.
         </p>
         <div class="mt-8 flex flex-col gap-3 sm:flex-row">
           <PlayStoreButton />
@@ -233,7 +231,7 @@ const structuredData = {
             <h2 class="mt-4 text-4xl font-black">Let Android notifications speak when looking down is not ideal.</h2>
           </div>
           <div class="flex flex-col gap-3 sm:flex-row lg:justify-end">
-            <PlayStoreButton className="bg-white text-ink hover:bg-slate-100" />
+            <PlayStoreButton variant="light" />
             <a
               class="inline-flex items-center justify-center rounded-md border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-white/15 focus:outline-none focus:ring-2 focus:ring-orange-300 focus:ring-offset-2 focus:ring-offset-ink"
               href={`${base}privacy-policy/`}
