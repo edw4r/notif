@@ -249,7 +249,7 @@ const structuredData = {
     let wheelIdleTimer = 0;
     let pointerIdleTimer = 0;
     let halfTrackWidth = 0;
-    const AUTO_SCROLL_PX_PER_SECOND = 28;
+    const AUTO_SCROLL_PX_PER_SECOND = 56;
 
     const clearWheelIdle = () => {
       if (wheelIdleTimer) {
@@ -269,13 +269,20 @@ const structuredData = {
       halfTrackWidth = track.scrollWidth / 2;
     };
 
+    const wrapScrollLeft = (value: number) => {
+      if (!halfTrackWidth) return value;
+      let wrapped = value % halfTrackWidth;
+      if (wrapped < 0) wrapped += halfTrackWidth;
+      return wrapped;
+    };
+
+    const setWrappedScrollLeft = (value: number) => {
+      viewport.scrollLeft = wrapScrollLeft(value);
+    };
+
     const normalizeScrollBounds = () => {
       if (!halfTrackWidth) return;
-      if (viewport.scrollLeft >= halfTrackWidth) {
-        viewport.scrollLeft -= halfTrackWidth;
-      } else if (viewport.scrollLeft < 0) {
-        viewport.scrollLeft += halfTrackWidth;
-      }
+      setWrappedScrollLeft(viewport.scrollLeft);
     };
 
     const isPaused = () => {
@@ -289,8 +296,7 @@ const structuredData = {
       lastTs = ts;
 
       if (!isPaused()) {
-        viewport.scrollLeft += AUTO_SCROLL_PX_PER_SECOND * deltaSeconds;
-        normalizeScrollBounds();
+        setWrappedScrollLeft(viewport.scrollLeft + AUTO_SCROLL_PX_PER_SECOND * deltaSeconds);
       }
       rafId = window.requestAnimationFrame(tick);
     };
@@ -308,7 +314,7 @@ const structuredData = {
     };
 
     updateHalfTrackWidth();
-    viewport.scrollLeft = 1;
+    setWrappedScrollLeft(1);
     startLoop();
 
     const resizeObserver = new ResizeObserver(() => {
@@ -363,8 +369,7 @@ const structuredData = {
       if (!mostlyHorizontal) return;
       wheelEvent.preventDefault();
       pauseState.wheel = true;
-      viewport.scrollLeft += wheelEvent.deltaX;
-      normalizeScrollBounds();
+      setWrappedScrollLeft(viewport.scrollLeft + wheelEvent.deltaX);
       setWheelIdle();
     }, { passive: false });
 
