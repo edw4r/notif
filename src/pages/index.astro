@@ -39,13 +39,6 @@ const moments = [
   ['Message-heavy days', 'Give your eyes a break from emails, DMs, chats, and app alerts.']
 ];
 
-const comparisons = [
-  ['Checking your screen', 'Notif helps you hear selected updates without picking up your phone every few minutes.'],
-  ['Generic voice assistants', 'Notif focuses on Android notification readouts instead of trying to be a full assistant.'],
-  ['Manual notification readers', 'Per-app controls and custom limits keep spoken alerts practical for daily use.'],
-  ['Offline-first workflow', 'Notif keeps notification readout logic on your device, with no account required.']
-];
-
 const base = import.meta.env.BASE_URL.endsWith('/')
   ? import.meta.env.BASE_URL
   : `${import.meta.env.BASE_URL}/`;
@@ -104,7 +97,7 @@ const structuredData = {
           Hear Android notifications hands-free.
         </h1>
         <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-600">
-          Notif turns selected Android notifications into spoken readouts while keeping the logic on your device. Use it while walking, coding, running, or handling chores without unlocking your phone.
+          Notif turns selected Android notifications into spoken readouts while keeping the logic on your device. It was built for Android users who miss spoken notifications and want a practical way to hear important updates while walking, coding, running, or handling chores without constantly looking down.
         </p>
         <div class="mt-8 flex flex-col gap-3 sm:flex-row">
           <PlayStoreButton />
@@ -194,31 +187,6 @@ const structuredData = {
               </div>
             ))
           }
-        </div>
-      </div>
-    </section>
-
-    <section class="bg-white/85 py-20">
-      <div class="mx-auto grid max-w-7xl gap-12 px-6 lg:grid-cols-2 lg:px-8">
-        <div>
-          <p class="text-sm font-bold uppercase tracking-[0.22em] text-signal">Built from a real need</p>
-          <h2 class="mt-4 text-4xl font-black text-ink">For Android users who miss spoken notifications.</h2>
-          <p class="mt-5 text-lg leading-8 text-slate-600">
-            Notif started from a simple gap: people switching from iPhone to Android, commuters, runners, and busy parents still wanted a practical way to hear important notifications without constantly looking down.
-          </p>
-        </div>
-        <div>
-          <p class="text-sm font-bold uppercase tracking-[0.22em] text-leaf">Why Notif feels different</p>
-          <div class="mt-5 grid gap-4">
-            {
-              comparisons.map(([title, body]) => (
-                <article class="rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
-                  <h3 class="font-bold text-ink">{title}</h3>
-                  <p class="mt-2 leading-7 text-slate-600">{body}</p>
-                </article>
-              ))
-            }
-          </div>
         </div>
       </div>
     </section>
