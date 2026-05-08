@@ -30,6 +30,10 @@ const testimonials = [
   ['Runner', 'When I am running, I can still hear updates from work emails or Slack without stopping to check my phone. It helps me stay connected while moving.'],
   ['Busy mom', 'When I am doing housework, I can turn on the speaker and focus on my chores while still hearing important notifications. That is great!']
 ];
+const testimonialCarouselItems = [
+  ...testimonials.map(([label, quote]) => ({ label, quote, duplicate: false })),
+  ...testimonials.map(([label, quote]) => ({ label, quote, duplicate: true }))
+];
 
 const moments = [
   ['Walking home', 'Keep your phone in your pocket and stay aware of your surroundings.'],
@@ -123,9 +127,9 @@ const structuredData = {
           >
           <div class="testimonial-track flex w-max gap-3 py-5" data-testimonial-track>
             {
-              [...testimonials, ...testimonials].map(([label, quote], index) => (
+              testimonialCarouselItems.map(({ label, quote, duplicate }, index) => (
                 <figure
-                  class="testimonial-card w-[250px] rounded-lg border border-slate-200 bg-white p-4 shadow-sm sm:w-[270px] lg:w-[300px]"
+                  class={`testimonial-card w-[250px] rounded-lg border border-slate-200 bg-white p-4 shadow-sm sm:w-[270px] lg:w-[300px]${duplicate ? ' testimonial-card--duplicate' : ''}`}
                   style={`animation-delay: ${Math.min(index % testimonials.length, 3) * 90}ms`}
                 >
                   <blockquote class="text-sm leading-6 text-slate-700">"{quote}"</blockquote>
