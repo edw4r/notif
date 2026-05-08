@@ -30,6 +30,7 @@ const testimonials = [
   ['Runner', 'When I am running, I can still hear updates from work emails or Slack without stopping to check my phone. It helps me stay connected while moving.'],
   ['Busy mom', 'When I am doing housework, I can turn on the speaker and focus on my chores while still hearing important notifications. That is great!']
 ];
+const testimonialLoops = [0, 1, 2];
 
 const moments = [
   ['Walking home', 'Keep your phone in your pocket and stay aware of your surroundings.'],
@@ -123,15 +124,18 @@ const structuredData = {
           >
           <div class="testimonial-track flex w-max gap-3 py-5" data-testimonial-track>
             {
-              testimonials.map(([label, quote], index) => (
-                <figure
-                  class="testimonial-card w-[250px] rounded-lg border border-slate-200 bg-white p-4 shadow-sm sm:w-[270px] lg:w-[300px]"
-                  style={`animation-delay: ${Math.min(index % testimonials.length, 3) * 90}ms`}
-                >
-                  <blockquote class="text-sm leading-6 text-slate-700">"{quote}"</blockquote>
-                  <figcaption class="mt-4 text-xs font-bold uppercase tracking-[0.16em] text-signal">{label}</figcaption>
-                </figure>
-              ))
+              testimonialLoops.flatMap((loopIndex) =>
+                testimonials.map(([label, quote], index) => (
+                  <figure
+                    aria-hidden={loopIndex === 1 ? undefined : 'true'}
+                    class="testimonial-card w-[250px] rounded-lg border border-slate-200 bg-white p-4 shadow-sm sm:w-[270px] lg:w-[300px]"
+                    style={`animation-delay: ${Math.min(index, 3) * 90}ms`}
+                  >
+                    <blockquote class="text-sm leading-6 text-slate-700">"{quote}"</blockquote>
+                    <figcaption class="mt-4 text-xs font-bold uppercase tracking-[0.16em] text-signal">{label}</figcaption>
+                  </figure>
+                ))
+              )
             }
           </div>
           </div>
@@ -235,23 +239,181 @@ const structuredData = {
 <script>
   (() => {
     const viewport = document.querySelector('[data-testimonial-carousel]');
-    if (!viewport) return;
+    const track = viewport?.querySelector('[data-testimonial-track]');
+    if (!(viewport instanceof HTMLElement) || !(track instanceof HTMLElement)) return;
 
-    const mobileQuery = window.matchMedia('(max-width: 767px)');
-    const isMobile = () => mobileQuery.matches;
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const pauseState = {
+      focus: false,
+      hover: false,
+      pointer: false,
+      wheel: false
+    };
+
+    const AUTO_SCROLL_PX_PER_SECOND = 44;
+    const LOOP_COUNT = 3;
+    const RESUME_DELAY_MS = 420;
+
+    let animationFrame = 0;
+    let lastTimestamp = 0;
+    let loopWidth = 0;
+    let pointerTimer = 0;
+    let scrollFrame = 0;
+    let settingScroll = false;
+    let wheelTimer = 0;
+
+    const measureLoop = () => {
+      loopWidth = track.scrollWidth / LOOP_COUNT;
+    };
+
+    const isPaused = () =>
+      motionQuery.matches ||
+      pauseState.focus ||
+      pauseState.hover ||
+      pauseState.pointer ||
+      pauseState.wheel;
+
+    const setScrollLeft = (value: number) => {
+      settingScroll = true;
+      viewport.scrollLeft = value;
+      window.requestAnimationFrame(() => {
+        settingScroll = false;
+      });
+    };
+
+    const normalizeScroll = () => {
+      if (!loopWidth) return;
+
+      if (viewport.scrollLeft >= loopWidth * 2) {
+        setScrollLeft(viewport.scrollLeft - loopWidth);
+      } else if (viewport.scrollLeft < loopWidth) {
+        setScrollLeft(viewport.scrollLeft + loopWidth);
+      }
+    };
+
+    const clearPointerTimer = () => {
+      if (pointerTimer) {
+        window.clearTimeout(pointerTimer);
+        pointerTimer = 0;
+      }
+    };
+
+    const clearWheelTimer = () => {
+      if (wheelTimer) {
+        window.clearTimeout(wheelTimer);
+        wheelTimer = 0;
+      }
+    };
+
+    const resumePointerSoon = () => {
+      clearPointerTimer();
+      pointerTimer = window.setTimeout(() => {
+        pauseState.pointer = false;
+      }, RESUME_DELAY_MS);
+    };
+
+    const resumeWheelSoon = () => {
+      clearWheelTimer();
+      wheelTimer = window.setTimeout(() => {
+        pauseState.wheel = false;
+      }, RESUME_DELAY_MS);
+    };
+
+    const tick = (timestamp: number) => {
+      if (!lastTimestamp) lastTimestamp = timestamp;
+      const elapsedSeconds = Math.min((timestamp - lastTimestamp) / 1000, 0.05);
+      lastTimestamp = timestamp;
+
+      if (!isPaused()) {
+        setScrollLeft(viewport.scrollLeft + AUTO_SCROLL_PX_PER_SECOND * elapsedSeconds);
+        normalizeScroll();
+      }
+
+      animationFrame = window.requestAnimationFrame(tick);
+    };
+
+    const startLoop = () => {
+      if (!animationFrame) {
+        animationFrame = window.requestAnimationFrame(tick);
+      }
+    };
+
+    const stopLoop = () => {
+      if (animationFrame) {
+        window.cancelAnimationFrame(animationFrame);
+        animationFrame = 0;
+      }
+      lastTimestamp = 0;
+    };
+
+    measureLoop();
+    setScrollLeft(loopWidth);
+    startLoop();
+
+    const resizeObserver = new ResizeObserver(() => {
+      const progress = loopWidth ? viewport.scrollLeft - loopWidth : 0;
+      measureLoop();
+      setScrollLeft(loopWidth + Math.max(0, Math.min(progress, loopWidth)));
+      normalizeScroll();
+    });
+    resizeObserver.observe(track);
+
+    viewport.addEventListener('mouseenter', () => {
+      pauseState.hover = true;
+    });
+
+    viewport.addEventListener('mouseleave', () => {
+      pauseState.hover = false;
+    });
+
+    viewport.addEventListener('focusin', () => {
+      pauseState.focus = true;
+    });
+
+    viewport.addEventListener('focusout', () => {
+      pauseState.focus = false;
+    });
+
+    viewport.addEventListener('pointerdown', () => {
+      pauseState.pointer = true;
+      clearPointerTimer();
+    });
+
+    viewport.addEventListener('pointerup', resumePointerSoon);
+    viewport.addEventListener('pointercancel', resumePointerSoon);
+
+    viewport.addEventListener('scroll', () => {
+      if (settingScroll || scrollFrame) return;
+      scrollFrame = window.requestAnimationFrame(() => {
+        scrollFrame = 0;
+        normalizeScroll();
+      });
+    }, { passive: true });
 
     viewport.addEventListener('wheel', (event: Event) => {
-      if (isMobile()) return;
       const wheelEvent = event as WheelEvent;
       const mostlyHorizontal = Math.abs(wheelEvent.deltaX) >= Math.abs(wheelEvent.deltaY) * 0.85;
       if (!mostlyHorizontal) return;
       wheelEvent.preventDefault();
+      pauseState.wheel = true;
       viewport.scrollLeft += wheelEvent.deltaX;
+      normalizeScroll();
+      resumeWheelSoon();
     }, { passive: false });
 
-    mobileQuery.addEventListener('change', () => {
-      if (isMobile()) {
-        viewport.scrollLeft = 0;
+    motionQuery.addEventListener('change', () => {
+      pauseState.pointer = false;
+      pauseState.wheel = false;
+      lastTimestamp = 0;
+    });
+
+    window.addEventListener('beforeunload', () => {
+      clearPointerTimer();
+      clearWheelTimer();
+      stopLoop();
+      resizeObserver.disconnect();
+      if (scrollFrame) {
+        window.cancelAnimationFrame(scrollFrame);
       }
     });
   })();

@@ -104,8 +104,6 @@ a {
 
   .testimonial-viewport {
     cursor: auto;
-    scroll-snap-type: x mandatory;
-    scroll-padding-inline: 0.125rem;
   }
 
   .testimonial-track {
