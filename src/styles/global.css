@@ -54,7 +54,15 @@ a {
 }
 
 .testimonial-card {
+  position: relative;
+  isolation: isolate;
   animation: testimonial-rise 560ms ease both;
+  transition: border-color 180ms ease;
+  scroll-snap-align: start;
+}
+
+.testimonial-card:hover {
+  border-color: rgb(148 163 184 / 0.8);
 }
 
 @keyframes testimonial-rise {
@@ -78,4 +86,36 @@ a {
   .testimonial-card {
     animation: none;
   }
+
+  .testimonial-card {
+    transition: none;
+  }
+
+  .testimonial-card:hover {
+    border-color: inherit;
+  }
+}
+
+@media (max-width: 767px) {
+  .testimonial-lane {
+    overflow-x: hidden;
+    overflow-y: hidden;
+  }
+
+  .testimonial-viewport {
+    cursor: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 0.125rem;
+  }
+
+  .testimonial-track {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+  }
+
+  .testimonial-card {
+    width: min(84vw, 320px);
+    max-width: min(84vw, 320px);
+  }
+
 }
