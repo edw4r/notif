@@ -63,14 +63,30 @@ a {
 .testimonial-card::after {
   content: "";
   position: absolute;
-  inset: -8px;
+  inset: -6px;
   border-radius: 0.9rem;
-  border: 2px solid rgba(14, 165, 233, 0.72);
-  box-shadow:
-    0 0 0 0 rgba(14, 165, 233, 0.45),
-    0 0 28px 3px rgba(125, 211, 252, 0.35);
+  border: 1px solid rgba(100, 116, 139, 0.28);
+  background:
+    linear-gradient(
+      115deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(186, 230, 253, 0.16) 42%,
+      rgba(224, 242, 254, 0.34) 50%,
+      rgba(186, 230, 253, 0.16) 58%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  background-size: 220% 100%;
+  background-position: 170% 0;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) padding-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  padding: 1px;
   opacity: 0;
-  transform: scale(0.96);
   pointer-events: none;
 }
 
@@ -82,8 +98,8 @@ a {
 }
 
 .testimonial-card:hover::after {
-  opacity: 0.95;
-  animation: heartbeat-wave 0.95s cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+  opacity: 0.85;
+  animation: border-shine 1.6s linear infinite;
 }
 
 @keyframes testimonial-rise {
@@ -98,20 +114,13 @@ a {
   }
 }
 
-@keyframes heartbeat-wave {
+@keyframes border-shine {
   0% {
-    transform: scale(0.96);
-    opacity: 0.95;
-  }
-
-  40% {
-    transform: scale(1.035);
-    opacity: 0.8;
+    background-position: 170% 0;
   }
 
   100% {
-    transform: scale(1.14);
-    opacity: 0;
+    background-position: -70% 0;
   }
 }
 
@@ -136,6 +145,6 @@ a {
   }
 
   .testimonial-card:hover::after {
-    opacity: 0.65;
+    opacity: 0.5;
   }
 }
